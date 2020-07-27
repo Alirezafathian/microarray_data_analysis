@@ -1,0 +1,204 @@
+---
+title: "Microarray Data Analysis"
+author: "Alireza Fathian"
+
+output:
+  html_document:
+    toc: yes
+knit: (function(inputFile, encoding) {
+  rmarkdown::render(inputFile, encoding = encoding, output_dir = "./../output") })
+---
+***
+# Introduction
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Setting up project directory
+```{r}
+knitr::opts_knit$set(root.dir = '/home/alireza/Scripts/microarray_data_analysis')
+```
+
+# Import libraries
+```{r, include=FALSE}
+#install.packages(c("limma","GEOquery","Biobase","pheatmap",
+#                   "ggplot2","gplots","reshape2","plyr"))
+#install.packages("Biobase")
+#install.packages("GEOquery")
+#install.packages("limma")
+#install.packages("gplots")
+#install.packages("ggplot2")
+#install.packages("plyr")
+#install.packages("pheatmap")
+```
+
+```{r,message=FALSE}
+library(limma)
+library(Biobase)
+library(GEOquery)
+library(pheatmap)
+#library(gplots)
+library(ggplot2)
+library(plyr)
+library(pheatmap)
+```
+
+# Load Data
+
+Importing GSE52509_series_matrix.txt.gz
+```{r,message=FALSE,warning=FALSE,include=FALSE}
+#gset = getGEO("GSE52509",GSEMatrix = TRUE, AnnotGPL = TRUE, destdir = "./data/raw")
+```
+
+```{r,message=FALSE, include=FALSE}
+a = getwd()
+strsplit(a, "/src", fixed = TRUE)
+datadir = paste(strsplit(a, "/src", fixed = TRUE),"/data/raw/GSE52509_series_matrix.txt.gz",sep = "")
+```
+
+```{r,message=FALSE,warning=FALSE}
+# import existing data
+print(datadir)
+gset=getGEO(filename=datadir, GSEMatrix = TRUE, AnnotGPL = TRUE)
+```
+
+# Dataset Description
+
+```{r}
+header=gset[[1]]
+print(header)
+```
+
+Choosing shoerter column names:
+```{r}
+sml=c(rep("smoke_4",3),rep("control_4",3),rep("smoke_6",3),rep("control_6",3))
+sml <- factor(sml)
+levels(sml)
+class(sml)
+```
+
+# Extracting Matrices
+```{r}
+ex<-exprs(gset)
+class(ex)
+dim(ex)
+```
+
+Frequency Histogram
+
+```{r}
+hist(ex[,1])
+```
+
+Normalizing Data
+
+```{r}
+ex<-log2(ex)
+hist(ex[,1])
+exprs(gset)<-ex
+boxplot(ex,outline=FALSE)
+```
+
+If data was not normal
+
+```{r}
+x<-normalizeQuantiles(ex)
+boxplot(x)
+```
+
+# Plot Correlation HeatMap
+
+```{r}
+pheatmap(cor(ex))
+pheatmap(cor(ex),labels_row = sml,labels_col = sml)
+```
+
+
+# Principal Component Analysis
+
+```{r}
+pca<-prcomp(ex)
+plot(pca)
+names(pca)
+pca$sdev
+colnames(pca$x)
+plot(pca$x[,1:2])
+```
+
+```{r}
+ex_scale=t(scale(t(ex),scale=F))
+mean(ex_scale[1,])
+pca2<-prcomp(ex_scale)
+plot(pca2)
+plot(pca2$x[,1:2])
+```
+
+```{r}
+plot(pca2$r)
+pc.sample<-data.frame(pca2$r[,1:3],Group=sml)
+head(pc.sample)
+ggplot(pc.sample,aes(PC1,PC2,color=Group))+geom_point(size=3)+theme_bw()
+dev.off()
+```
+
+```{r}
+pca2<-prcomp(t(ex_scale))
+pc.sample<-data.frame(pca2$x[,1:3],Group=sml)
+head(pc.sample)
+ggplot(pc.sample,aes(PC1,PC2,color=Group))+geom_point(size=3)+theme_bw()
+dev.off()
+
+```
+
+```{r}
+sml <- factor(sml)
+levels(sml)
+sml
+gset$description <- sml
+design <- model.matrix(~ description + 0, gset) #112
+colnames(design) <- levels(sml)
+head(design)
+design
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
+
+```{r}
+```
