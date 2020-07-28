@@ -7,7 +7,7 @@ We used microarray data to compare the expression of two different sets of genes
 
 ## Example
 
-we used GEO dataset <a href=https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52509">GSE13601</a> as an example. In this dataset there are expression data from cigarette smoke-treated mice at 4 and 6 months of age [[1]](#1).
+we used GEO dataset <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE52509">GSE13601</a> as an example. In this dataset there are expression data from cigarette smoke-treated mice at 4 and 6 months of age [[1]](#1).
 
 
 ## Requirements
