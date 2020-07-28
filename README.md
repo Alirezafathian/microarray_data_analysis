@@ -17,9 +17,13 @@ we used GEO dataset <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
 
 
 - Correlation matrix of samples
+
 ![](https://github.com/Alirezafathian/microarray_data_analysis/blob/master/output/fig/heatmap.png)
+
 - Principal component analysis results
+
 ![](https://github.com/Alirezafathian/microarray_data_analysis/blob/master/output/fig/pca.png)
+
 - List of the up-regulated genes
 
 <a href="https://github.com/Alirezafathian/microarray_data_analysis/blob/master/output/upregulated/upregulated.txt">upregulated.txt</a>
