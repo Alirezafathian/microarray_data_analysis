@@ -17,10 +17,10 @@ we used GEO dataset <a href="https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=
 
 Subjects goups:
 
-control_4: Control mice at 4 months of age 
-control_6: Control mice at 4 months of age 
-smoke_4: Cigarette smoke-treated mice at 4 months of age
-smoke_6: Cigarette smoke-treated mice at 6 months of age
+control_4: Control mice at 4 months of age   
+control_6: Control mice at 4 months of age   
+smoke_4: Cigarette smoke-treated mice at 4 months of age  
+smoke_6: Cigarette smoke-treated mice at 6 months of age  
 
 - Correlation matrix of samples
 
