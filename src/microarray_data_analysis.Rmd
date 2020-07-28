@@ -3,7 +3,9 @@ title: "Microarray Data Analysis"
 author: "Alireza Fathian"
 
 output:
-  html_document:
+#  html_document:
+#    toc: yes
+  pdf_document:
     toc: yes
 knit: (function(inputFile, encoding) {
   rmarkdown::render(inputFile, encoding = encoding, output_dir = "./../output") })
@@ -105,11 +107,11 @@ x<-normalizeQuantiles(ex)
 boxplot(x)
 ```
 
-# Plot Correlation HeatMap
+# Correlation HeatMap
 
 ```{r}
 pheatmap(cor(ex))
-pheatmap(cor(ex),labels_row = sml,labels_col = sml)
+pheatmap(cor(ex),labels_row = sml,labels_col = sml,legend = TRUE)
 ```
 
 
@@ -160,7 +162,47 @@ head(design)
 design
 ```
 
+# Differential Gene Expression
+
 ```{r}
+fit <- lmFit(gset, design)
+cont.matrix <- makeContrasts(smoke_4-control_4, levels=design)
+fit2 <- contrasts.fit(fit, cont.matrix)
+fit2 <- eBayes(fit2, 0.01)
+```
+Selecting first 250 genes with highest adjusted p-value
+```{r}
+tT <- topTable(fit2, adjust="fdr", sort.by="B", number=250)
+tT <- topTable(fit2, adjust="fdr", sort.by="B", number=Inf)
+colnames(tT)
+head(ex)
+tT <- subset(tT, select=c("ID","adj.P.Val","P.Value","t","B","logFC",
+                          "Gene.symbol","Gene.title"))
+tT <- topTable(fit2, adjust="fdr", sort.by="B", number=Inf)
+colnames(tT)
+head(ex)
+tT <- subset(tT, select=c("ID","adj.P.Val","P.Value","t","B","logFC",
+                          "Gene.symbol","Gene.title"))
+```
+
+```{r}
+ms.up=subset(tT,select=c("ID","adj.P.Val","logFC","Gene.symbol"))
+ms.up=subset(tT,tT$logFC>1 & tT$adj.P.Val<0.05, select=c( "ID", "adj.P.Val", "logFC", "Gene.symbol"))
+
+```
+Finding out the up-regulated genes
+```{r}
+ms.up.genenames<- sub("///.*","",ms.up$Gene.symbol)
+ms.up.genenames<- ms.up.genenames[ms.up.genenames!= ""]
+ms.up.genenames<- strsplit2(ms.up.genenames,"///")
+ms.up.genenames<- unique(ms.up.genenames)
+
+ms.up.genenames
+ms.up$Gene.symbol
+```
+
+```{r}
+write.table(ms.up.genenames,"results/up_ptA_ptB.txt", quote = F,row.names = F, col.names = F)
 ```
 
 ```{r}
@@ -169,35 +211,3 @@ design
 ```{r}
 ```
 
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
-
-```{r}
-```
