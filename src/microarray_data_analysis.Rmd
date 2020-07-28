@@ -12,16 +12,19 @@ knit: (function(inputFile, encoding) {
 ---
 ***
 # Introduction
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
 # Setting up project directory
+
 ```{r}
 knitr::opts_knit$set(root.dir = '/home/alireza/Scripts/microarray_data_analysis')
 ```
 
 # Import libraries
+
 ```{r, include=FALSE}
 #install.packages(c("limma","GEOquery","Biobase","pheatmap",
 #                   "ggplot2","gplots","reshape2","plyr"))
@@ -71,6 +74,7 @@ print(header)
 ```
 
 Choosing shoerter column names:
+
 ```{r}
 sml=c(rep("smoke_4",3),rep("control_4",3),rep("smoke_6",3),rep("control_6",3))
 sml <- factor(sml)
@@ -111,9 +115,16 @@ boxplot(x)
 
 ```{r}
 pheatmap(cor(ex))
-pheatmap(cor(ex),labels_row = sml,labels_col = sml,legend = TRUE)
+colnames(ex) = sml
+pheatmap(cor(ex))
 ```
 
+```{r, include=FALSE}
+dev.off()
+pdf("./output/fig/heatmap.pdf",width = 10,height = 10)
+pheatmap(cor(ex))
+dev.off()
+```
 
 # Principal Component Analysis
 
@@ -148,7 +159,13 @@ pc.sample<-data.frame(pca2$x[,1:3],Group=sml)
 head(pc.sample)
 ggplot(pc.sample,aes(PC1,PC2,color=Group))+geom_point(size=3)+theme_bw()
 dev.off()
+```
 
+```{r}
+dev.off()
+pdf("./output/fig/pca.pdf",width = 10,height = 10)
+ggplot(pc.sample,aes(PC1,PC2,color=Group))+geom_point(size=3)+theme_bw()
+dev.off()
 ```
 
 ```{r}
@@ -170,7 +187,9 @@ cont.matrix <- makeContrasts(smoke_4-control_4, levels=design)
 fit2 <- contrasts.fit(fit, cont.matrix)
 fit2 <- eBayes(fit2, 0.01)
 ```
+
 Selecting first 250 genes with highest adjusted p-value
+
 ```{r}
 tT <- topTable(fit2, adjust="fdr", sort.by="B", number=250)
 tT <- topTable(fit2, adjust="fdr", sort.by="B", number=Inf)
@@ -193,7 +212,9 @@ ms.up=subset(tT,tT$logFC>1 & tT$adj.P.Val<0.05, select=c( "ID", "adj.P.Val", "lo
 ```{r}
 #write.table(ms.up.genenames,"/data/processed/up_ptA_ptB.txt", quote = F,row.names = F, col.names = F)
 ```
+
 Finding out the up-regulated genes
+
 ```{r}
 ms.up.genenames<- sub("///.*","",ms.up$Gene.symbol)
 ms.up.genenames<- ms.up.genenames[ms.up.genenames!= ""]
@@ -205,6 +226,6 @@ ms.up$Gene.symbol
 ```
 
 ```{r}
-write.table(ms.up.genenames,"./data/processed/up_ptA_ptB.txt", quote = F,row.names = F, col.names = F)
+write.table(ms.up.genenames,"./output/upregulated/upregulated.txt", quote = F,row.names = F, col.names = F)
 ```
 
